@@ -1,0 +1,131 @@
+
+
+10%Sales = [Sales]*0.1 
+Total Sales = [Sales]*[Quantity]
+ 
+*** Date & Time Functions
+Year=YEAR([Order Date])
+WEEKNUM=WEEKNUM([Order Date])
+MONTH=MONTH([Order Date])
+WEEKDAY=WEEKDAY([Order Date])
+DateDiff = DATEDIFF([Order Date],[Ship Date],DAY)
+DATEDIFF_01 = DATEDIFF([Order Date],[Ship Date],WEEK)
+Eomonth = EOMONTH([Order Date],0)
+Now = Now()
+
+*** FIlter Functions && --> AND ,|| --> Or 
+REGION_SOUTH = FILTER(SalesOrder,SalesOrder[Region]="South")
+REG_S_W = FILTER(SalesOrder,OR(SalesOrder[Region]="South",SalesOrder[Region]="West")) 
+NEG_PROFITS = FILTER(SalesOrder,SalesOrder[Profit]<0)
+FURN_SOUTH = FILTER(SalesOrder,AND(SalesOrder[Region]="South",SalesOrder[Category]="Furniture"))
+SALES_BET_01 = FILTER(SalesOrder,SalesOrder[Region]="South"&&SalesOrder[Category]="Furniture"&&
+SalesOrder[Profit]>0)
+REG_S_C = FILTER(SalesOrder,SalesOrder[Region]="South"||SalesOrder[Region]="West")
+
+SUM SALES=Sum(Salesorder[Sales])
+SOUTH SALES = CALCULATE(sum(Salesorder[Sales]),Filter(SalesOrder,SalesOrder[Region]="SOuth"))
+
+AVG SALES = AVERAGE(Salesorder[Sales]) 
+Average SALES_01 = CALCULATE(Average(Salesorder[Sales]),Filter(SalesOrder,SalesOrder[Region]="SOuth"))
+
+MAXSALES = MAX(Salesorder[Sales]) 
+MAXSALES_01 = CALCULATE(MAX(Salesorder[Sales]),Filter(SalesOrder,SalesOrder[Region]="SOuth"))
+
+*** Logical 
+IF_01 = if(SalesOrder[Profit]>0,"Positive Profit","Negative Profit")
+IF_02 = if(SalesOrder[Profit]>0,"Positive Profit",if(SalesOrder[Profit]<0,"Negative Profit","Zero Profit")) 
+IF_03 = if(and(SalesOrder[Sales]>3000,SalesOrder[Profit]>0) ,"High Sales","Mid Sales")
+IF_04 = if(and(SalesOrder[Sales]>3000,SalesOrder[Profit]>0),"Good Sales",
+        if(and(SalesOrder[Sales]>1000,SalesOrder[Profit]>0),"Avg Sales","Low Sales/No Profit"))
+IF_05 = if(or(SalesOrder[Sales]>3000,SalesOrder[Profit]>0),"Good Sales","No Sales/Profit")
+
+*** Time & Intelligence Functions
+-- Date Column should conitnuous dates [No Gaps between dates]
+-- All Date Should be unique
+
+Step -1  Newt Table Apply Below Formula
+CalendareDates = CALENDAR("01-Jan-2014","31-Dec-2017")
+CalendareDates = CALENDAR(min(salesorder[Order Date]),max(salesorder[Order Date]))
+Year = Year([Date])
+Month = MONTH([Date])
+Day = Day([Date])
+Quarter = QUARTER([Date])
+Month_name = FORMAT('Calender'[Date],"MMMM")
+
+Step -2
+
+Mark CalendarDate Table as Date Table by selecting Date Column
+In Model View Drag orderdate from Salesorder table to CalendarDates Date Column
+
+Step -3 
+Create Mesaures
+PY_SALES = CALCULATE(sum(SalesOrder[Sales]),PREVIOUSYEAR(CalendareDates[Date]))
+PM_SALES = CALCULATE(sum(SalesOrder[Sales]),PREVIOUSMonth(CalendareDates[Date]))
+NY_SALES = CALCULATE(sum(SalesOrder[Sales]),NEXTYEAR(CalendareDates[Date]))
+NM_SALES = CALCULATE(sum(SalesOrder[Sales]),NEXTMonth(CalendareDates[Date]))
+NM_Profit = CALCULATE(sum(SalesOrder[Profit]),NEXTMonth(CalendareDates[Date]))
+PQ_SALES = CALCULATE(sum(SalesOrder[Sales]),PREVIOUSQUARTER(CalendareDates[Date]))
+NQ_SALES = CALCULATE(sum(SalesOrder[Sales]),NEXTQUARTER(CalendareDates[Date]))
+SAMPLEPERIODLASTYEAR = CALCULATE(sum(SalesOrder[Sales]),SAMEPERIODLASTYEAR(CalendareDates[Date]))
+TOTALYTD = TotalYTD(sum(SalesOrder[Sales]), CalendareDates[Date]))
+TOTALMTD = TotalMTD(sum(SalesOrder[Sales]), CalendareDates[Date]))
+
+*** Text 
+
+LEN = LEN([Order ID]) 
+LEFT = LEFT([Order ID],2)
+Right = RIGHT([Order ID],2) 
+CONCATENATE_01 = CONCATENATE([Order ID],[Returned]) 
+CONCATENATE_02 = CONCATENATE([Order ID],CONCATENATE(" ",[Returned]))
+Concatenate_03 = [Order ID]&" "&[Returned]&" Power BI "
+Search = search("ca",[Order ID],1,0)-->(Not case sensative 1=true 0 false)
+FIND = FIND("ca",[Order ID],1,0)-->(Case sensative 1=true 0 false)
+
+*** Information
+ISTEXT = ISTEXT([Sub-Category])
+ISEVEN = ISEVEN([Sales])
+ISBLANK = ISBLANK([Order ID]) 
+ISERROR = ISERROR([FIND_01]) 
+
+*** Math & Trig
+ABS = ABS([Profit]) 
+SQRT = SQRT([Quantity]) -->To Find Square root
+ROUND = round([Profit],1) -->
+ROUND = round([Profit],0)
+ROUND_02 = round([Sales],-1) ---> It shows nearest 10th digit number
+Ceiling = CEILING([Profit],2)------|do it in Excel 
+FLOOR = FLOOR([Sales],2) ----------|do it in Excel
+Degrees = DEGREES([Radians]) --->
+
+
+*** Stats
+COUNT = COUNT([Category]) 
+COUNTROWS = COUNTROWS([Category]) 
+MIN= MIN([Category]) 
+Max= MAX([Category]) 
+COUNTBLANK = COUNTBLANK([Category]) 
+AVG = AVERAGE(SalesOrder[Sales]) 
+
+*** Others
+CAT_FURNITURE = FILTER(SalesOrder,SalesOrder[Category]="Furniture")
+SOUTH_REGION = FILTER(SalesOrder,SalesOrder[Region]="South")
+UNION_01 = UNION(CAT_FURNITURE,SOUTH_REGION) --> 1)Union Combines rows from both tables
+                                                 2)Remove Duplicate rows
+                                                 3)Both tables must have same number order of column.
+EXCEPT = EXCEPT(CAT_FURNITURE,SOUTH_REGION) ---> except tabl 1 and table 2
+                                                 returns rows from 
+Intersect = INTERSECT(CAT_FURNITURE,SOUTH_REGION) ---> It Will return only the common rows  between both tables
+
+For more functions visit on :  https://learn.microsoft.com/en-us/dax/information-functions-dax
+
+
+
+
+
+
+
+
+
+
+
+
