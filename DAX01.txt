@@ -117,9 +117,14 @@ EXCEPT = EXCEPT(CAT_FURNITURE,SOUTH_REGION) ---> except tabl 1 and table 2
 Intersect = INTERSECT(CAT_FURNITURE,SOUTH_REGION) ---> It Will return only the common rows  between both tables
 
 For more functions visit on :  https://learn.microsoft.com/en-us/dax/information-functions-dax
-
-
-
+...........................................................................
+##How To Publish Pbix file Power-Bi Services
+1) Open Google Chrome browser search " Powerbi Service".
+2) Click on Workspace then click on New Workspace give the file name.
+3) Then Go to Power Bi App Select Pbix file which want to publish.
+4) click on Publish.
+5) Your File is Published.
+6) Go On POwer bi Services and in the my workspace your published file will be seen.
 
 
 
